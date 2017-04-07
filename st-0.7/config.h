@@ -5,8 +5,9 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char font[] = "Liberation Mono:pixelsize=18:antialias=true:autohint=true";
+static char font[] = "Liberation Mono:pixelsize=16:antialias=true:autohint=true";
 static int borderpx = 2;
+#define histsize 2000
 
 /*
  * What program is execed by st depends of these precedence rules:
@@ -151,8 +152,14 @@ static unsigned int defaultunderline = 7;
  */
 static MouseShortcut mshortcuts[] = {
 	/* button               mask            string */
-	{ Button4,              XK_ANY_MOD,     "\031" },
-	{ Button5,              XK_ANY_MOD,     "\005" },
+	{ Button4,              XK_NO_MOD,      "\031" },
+	{ Button5,              XK_NO_MOD,      "\005" },
+};
+
+static MouseKey mkeys[] = {
+	/* button               mask            function        argument */
+	{ Button4,              ShiftMask,      kscrollup,      {.i =  1} },
+	{ Button5,              ShiftMask,      kscrolldown,    {.i =  1} },
 };
 
 /* Internal keyboard shortcuts. */
@@ -164,14 +171,16 @@ static Shortcut shortcuts[] = {
 	{ ControlMask,          XK_Print,       toggleprinter,  {.i =  0} },
 	{ ShiftMask,            XK_Print,       printscreen,    {.i =  0} },
 	{ XK_ANY_MOD,           XK_Print,       printsel,       {.i =  0} },
-	{ XK_NO_MOD,            XK_F4,          xzoom,          {.f = +1} },
-	{ XK_NO_MOD,   		XK_F5,          xzoom,          {.f = -1} },
-	{ XK_NO_MOD,            XK_F6,          xzoomreset,     {.f =  0} },
-	{ XK_NO_MOD,            XK_F8,          selpaste,       {.i =  0} },
-	{ XK_NO_MOD,            XK_F7,          clippaste,      {.i =  0} },
-	{ XK_NO_MOD,            XK_F10,         clipcopy,       {.i =  0} },
-	{ XK_NO_MOD,            XK_F9,          clippaste,      {.i =  0} },
+	{ MODKEY|ShiftMask,     XK_Prior,       xzoom,          {.f = +1} },
+	{ MODKEY|ShiftMask,     XK_Next,        xzoom,          {.f = -1} },
+	{ MODKEY|ShiftMask,     XK_Home,        xzoomreset,     {.f =  0} },
+	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
+	{ MODKEY|ShiftMask,     XK_Insert,      clippaste,      {.i =  0} },
+	{ MODKEY|ShiftMask,     XK_C,           clipcopy,       {.i =  0} },
+	{ MODKEY|ShiftMask,     XK_V,           clippaste,      {.i =  0} },
 	{ MODKEY,               XK_Num_Lock,    numlock,        {.i =  0} },
+	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
+	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
 	{ XK_NO_MOD,	        XK_F1,	        winleft,	{.i =  -100} },
 	{ XK_NO_MOD,	        XK_F2,	        winright,	{.i =  +100} },
 	{ XK_NO_MOD,	        XK_F3,	        winbegin,	{.i =  0} },
